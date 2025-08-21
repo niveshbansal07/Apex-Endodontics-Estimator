@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Not Found - Apex Endodontics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+    <nav class="bg-white shadow flex justify-between items-center px-6 py-4">
+        <div class="text-2xl font-bold text-blue-700">Apex Endodontic Estimator</div>
+        <a href="{{ url_for('admin_login') }}" class="text-blue-600 hover:bg-blue-100 px-4 py-2 rounded transition duration-200">Admin Login</a>
+    </nav>
+    <main class="flex-1 flex flex-col items-center justify-center py-16">
+        <div class="bg-white shadow-lg rounded-lg p-8 text-center animate-fade-in">
+            <h2 class="text-3xl font-bold text-blue-700 mb-4">404 - Page Not Found</h2>
+            <p class="text-lg text-gray-700 mb-6">Sorry, the page you are looking for does not exist.</p>
+            <a href="{{ url_for('index') }}" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-200">Return Home</a>
+        </div>
+    </main>
+    <footer class="bg-blue-100 text-blue-800 text-center py-3 w-full fixed bottom-0 left-0 z-10">
+        &copy; {{ 2024 }} Apex Endodontics. All rights reserved.
+    </footer>
+</body>
+</html> 

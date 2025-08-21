@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Endodontics Estimator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-white shadow flex justify-between items-center px-6 py-4">
+        <div class="text-2xl font-bold" style="color: #006738;">
+            <img src="{{ url_for('static', filename='images/Logo1485411.gif') }}" alt="Logo" class="h-12 inline">
+        </div>
+        <a href="{{ url_for('admin_login') }}" class="px-4 py-2 rounded transition duration-200 hover:bg-gray-100" style="color: #006738;">
+            Admin Login
+        </a>
+    </nav>
+
+    <!-- Hero Section -->
+    <main class="flex-1 flex flex-col items-center justify-center text-center py-16">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-4" style="color: #006738;">
+            Estimate Your Endodontic Treatment Costs
+        </h1>
+        <p class="text-lg text-gray-700 mb-8">
+            Get a quick, transparent estimate for your dental treatment at Apex Endodontics.
+        </p>
+        <a href="{{ url_for('estimate') }}" class="text-white px-8 py-3 rounded-lg text-lg font-semibold shadow transition duration-300 transform hover:scale-105" style="background-color: #006738;">
+            Start Estimate
+        </a>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-3 w-full fixed bottom-0 left-0 z-10" style="background-color: #D6EDE4; color: #006738;">
+        &copy; {{ 2024 }} Apex Endodontics. All rights reserved.
+    </footer>
+</body>
+</html>

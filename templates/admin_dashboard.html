@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard - Apex Endodontics</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+  <!-- Navbar -->
+  <nav class="bg-white shadow flex justify-between items-center px-6 py-4">
+    <div class="text-2xl font-bold text-[#006738]">Apex Endodontic Estimator</div>
+    <a href="{{ url_for('admin_logout') }}" class="text-red-600 hover:bg-red-100 px-4 py-2 rounded transition duration-200">Logout</a>
+  </nav>
+
+  <main class="flex-1 flex flex-col items-center py-8">
+    <div class="w-full max-w-3xl bg-white shadow-lg rounded-lg p-8 animate-fade-in">
+      <h2 class="text-2xl font-bold mb-6 text-[#006738]">Edit Treatment Costs</h2>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="mb-4 text-green-600">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form method="POST">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {% for t_type, teeth in treatments.items() %}
+          <div class="border rounded p-4 bg-[#0067381A]"> <!-- light green background with opacity -->
+            <h3 class="font-semibold text-[#006738] mb-2">{{ t_type }}</h3>
+            {% for tooth, info in teeth.items() %}
+            <div class="mb-4">
+              <label class="block text-gray-700">{{ tooth }} Description</label>
+              <input
+                type="text"
+                name="{{ t_type }}_{{ tooth }}_desc"
+                value="{{ info.description }}"
+                class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#006738] transition mb-2"
+              />
+              <label class="block text-gray-700">{{ tooth }} Price ($)</label>
+              <input
+                type="number"
+                name="{{ t_type }}_{{ tooth }}_price"
+                value="{{ info.price }}"
+                min="0"
+                class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#006738] transition"
+              />
+            </div>
+            {% endfor %}
+          </div>
+          {% endfor %}
+        </div>
+
+        <button
+          type="submit"
+          class="mt-8 w-full bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 transition duration-200"
+        >
+          Save Changes
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#0067381A] text-[#006738] text-center py-3 w-full fixed bottom-0 left-0 z-10">
+    &copy; {{ 2024 }} Apex Endodontics. All rights reserved.
+  </footer>
+</body>
+</html>

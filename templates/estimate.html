@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estimate - Apex Endodontics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 flex flex-col min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-white shadow flex justify-between items-center px-6 py-4">
+        <div class="text-2xl font-bold" style="color: #006738;"><img src="{{ url_for('static', filename='images/Logo1485411.gif') }}" alt="Logo" class="h-12"></div>
+         <a href="{{ url_for('admin_login') }}" class="hover:bg-gray-100 px-4 py-2 rounded transition duration-200" style="color: #006738;">
+            Admin Login
+        </a>
+    </nav>
+    <main class="flex-1 flex flex-col items-center justify-center py-8">
+        <form id="estimateForm" method="POST" action="{{ url_for('estimate') }}"
+            class="w-full max-w-lg bg-white shadow-lg rounded-lg p-8 animate-fade-in">
+            <!-- Step 1: Treatment Type -->
+            <div class="step" id="step1">
+                <h2 class="text-2xl font-bold mb-4" style="color: #006738;">Step 1: Select Treatment Type</h2>
+                <div class="flex flex-col gap-3">
+                    {% for t in treatments.keys() %}
+                    <label class="flex items-center cursor-pointer">
+                        <input type="radio" name="treatment" value="{{ t }}" class="form-radio" style="accent-color: #006738;" required>
+                        <span class="ml-2 text-gray-800">{{ t }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+                <button type="button"
+                    class="mt-6 text-white px-6 py-2 rounded transition duration-200" style="background-color: #006738;"
+                    onclick="nextStep()">Next</button>
+            </div>
+            <!-- Step 2: Tooth Type -->
+            <div class="step hidden" id="step2">
+                <h2 class="text-2xl font-bold mb-4 " style="color: #006738;">Step 2: Select Tooth Type</h2>
+                <div class="flex flex-col gap-3">
+                    <label class="flex items-center cursor-pointer">
+                        <input type="radio" name="tooth" value="Front Tooth" class="form-radio" style="accent-color: #006738;" required>
+                        <span class="ml-2 text-gray-800">Front Tooth</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                        <input type="radio" name="tooth" value="Premolar" class="form-radio" style="accent-color: #006738;" required>
+                        <span class="ml-2 text-gray-800">Premolar</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                        <input type="radio" name="tooth" value="Molar" class="form-radio" style="accent-color: #006738;" required>
+                        <span class="ml-2 text-gray-800">Molar</span>
+                    </label>
+                </div>
+                <div class="flex justify-between mt-6">
+                    <button type="button"
+                        class="bg-gray-300 text-gray-800 px-6 py-2 rounded hover:bg-gray-400 transition duration-200"
+                        onclick="prevStep()">Back</button>
+                    <button type="button"
+                        class=" text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-200" style="background-color: #006738;"
+                        onclick="nextStep()">Next</button>
+                </div>
+            </div>
+            <!-- Step 3: Legal Agreement -->
+            <div class="step hidden" id="step3">
+                <h2 class="text-2xl font-bold mb-4" style="color: #006738;">Step 3: Required Acknowledgement</h2>
+                <div class="rounded p-4 mb-4 text-left text-gray-700" style="background-color: #f0f8f6; border: 1px solid #b2d8cc;">
+                    <ol class="list-decimal ml-6">
+                        <li>The costs provided are estimates only and are not a guarantee of fees.</li>
+                        <li>Actual costs could vary based on the diagnosis and treatment determined by the doctor.</li>
+                        <li>Apex Endodontics does not participate with insurance fee schedules. All fees are due at the
+                            time services are rendered.</li>
+                        <li>We are able to submit claims to some insurance carriers with possible reimbursement sent
+                            back to the subscriber.</li>
+                    </ol>
+                </div>
+                <label class="flex items-center">
+                    <input type="checkbox" id="legalAgree" class="form-checkbox" style="accent-color: #006738;" required>
+                    <span class="ml-2 text-gray-800">I agree to all the above conditions</span>
+                </label>
+                <div class="flex justify-between mt-6">
+                    <button type="button"
+                        class="bg-gray-300 text-gray-800 px-6 py-2 rounded hover:bg-gray-400 transition duration-200"
+                        onclick="prevStep()">Back</button>
+                    <button type="button"
+                        class=" text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-200" style="background-color: #006738;"
+                        onclick="nextStep()">Next</button>
+                </div>
+            </div>
+            <!-- Step 4: Cost Breakdown -->
+            <div class="step hidden" id="step4">
+                <h2 class="text-2xl font-bold mb-4" style="color: #006738;">Step 4: Estimated Cost Breakdown</h2>
+                <div id="estimateResult"
+                    class="rounded p-4 mb-4 text-left text-gray-700" style="background-color: #f0f8f6; border: 1px solid #b2d8cc;">
+                    <!-- Populated by JS -->
+                </div>
+                <div class="flex justify-between mt-6">
+                    <button type="button"
+                        class="bg-gray-300 text-gray-800 px-6 py-2 rounded hover:bg-gray-400 transition duration-200"
+                        onclick="prevStep()">Back</button>
+                    <button type="button"
+                        class="text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-200" style="background-color: #006738;"
+                        onclick="nextStep()">Next</button>
+                </div>
+            </div>
+            <!-- Step 5: Optional Contact Form -->
+            <!-- Step 5: Optional Contact Form -->
+            <div class="step hidden" id="step5">
+                <h2 class="text-2xl font-bold mb-4" style="color: #006738;">Step 5: (Optional) Contact Information</h2>
+                <div class="flex flex-col gap-4">
+                    <input type="text" name="full_name" placeholder="Full Name"
+                        class="px-4 py-2 border rounded focus:outline-none focus:ring-2 transition" style="--tw-ring-color: #006738;">
+                    <input type="date" name="dob" placeholder="Date of Birth"
+                        class="px-4 py-2 border rounded focus:outline-none focus:ring-2 transition" style="--tw-ring-color: #006738;">
+                    <input type="email" name="email" placeholder="Email"
+                        class="px-4 py-2 border rounded focus:outline-none focus:ring-2 transition" style="--tw-ring-color: #006738;">
+                    <input type="tel" name="phone" placeholder="Phone Number"
+                        class="px-4 py-2 border rounded focus:outline-none focus:ring-2 transition" style="--tw-ring-color: #006738;">
+                </div>
+
+                <!-- ✅ Email Checkbox added below the input fields -->
+                <div class="form-group mt-4">
+                    <label class="flex items-center">
+                        <input type="checkbox" name="send_email" value="yes" class="form-checkbox" style="color: #006738;">
+                        <span class="ml-2 text-gray-800">Email this information to our clinic</span>
+                    </label>
+                </div>
+
+                <input type="hidden" name="treatment" id="hiddenTreatment">
+                <input type="hidden" name="tooth" id="hiddenTooth">
+                <div class="flex justify-between mt-6">
+                    <button type="button"
+                        class="bg-gray-300 text-gray-800 px-6 py-2 rounded hover:bg-gray-400 transition duration-200"
+                        onclick="prevStep()">Back</button>
+                    <button type="submit"
+                        class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition duration-200">Submit</button>
+                </div>
+            </div>
+
+
+        </form>
+    </main>
+    <!-- Footer -->
+    <footer class="text-center py-3 w-full fixed bottom-0 left-0 z-10" style="background-color: #d6ede4; color: #006738;">
+        &copy; {{ 2024 }} Apex Endodontics. All rights reserved.
+    </footer>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 5;
+        const steps = Array.from(document.querySelectorAll('.step'));
+        function showStep(n) {
+            steps.forEach((el, i) => {
+                el.classList.toggle('hidden', i !== n - 1);
+            });
+        }
+        function nextStep() {
+            if (currentStep === 1) {
+                if (!document.querySelector('input[name="treatment"]:checked')) {
+                    alert('Please select a treatment type.');
+                    return;
+                }
+            }
+            if (currentStep === 2) {
+                if (!document.querySelector('input[name="tooth"]:checked')) {
+                    alert('Please select a tooth type.');
+                    return;
+                }
+            }
+            if (currentStep === 3) {
+                if (!document.getElementById('legalAgree').checked) {
+                    alert('You must agree to the legal conditions.');
+                    return;
+                }
+            }
+            if (currentStep === 4) {
+                // nothing to validate
+            }
+            if (currentStep < totalSteps) {
+                currentStep++;
+                if (currentStep === 4) {
+                    // Fetch estimate
+                    const treatment = document.querySelector('input[name="treatment"]:checked').value;
+                    const tooth = document.querySelector('input[name="tooth"]:checked').value;
+                    fetch("/get_estimate", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ treatment, tooth })
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.error) {
+                                document.getElementById('estimateResult').innerHTML = '<span class="text-red-600">' + data.error + '</span>';
+                            } else {
+                                document.getElementById('estimateResult').innerHTML =
+                                    `<div class='mb-2'><span class='font-semibold'>Treatment:</span> ${data.treatment}</div>` +
+                                    `<div class='mb-2'><span class='font-semibold'>Tooth Type:</span> ${data.tooth}</div>` +
+                                    `<div class='mb-2'><span class='font-semibold'>Description:</span> ${data.description}</div>` +
+                                    `<div class='mb-2'><span class='font-semibold'>Estimated Price:</span> <span class='text-blue-700 font-bold'>$${data.price}</span></div>`;
+                            }
+                        });
+                }
+                if (currentStep === 5) {
+                    // Set hidden fields for submission
+                    document.getElementById('hiddenTreatment').value = document.querySelector('input[name="treatment"]:checked').value;
+                    document.getElementById('hiddenTooth').value = document.querySelector('input[name="tooth"]:checked').value;
+                }
+                showStep(currentStep);
+            }
+        }
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+        // Animate fade-in
+        document.addEventListener('DOMContentLoaded', function () {
+            showStep(currentStep);
+        });
+    </script>
+    <!-- EmailJS SDK -->
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script>
+        // Initialize EmailJS with your public key
+        emailjs.init('der2jzpMcWp90Rydd');
+    </script>
+
+    <script>
+        document.getElementById("estimateForm").addEventListener("submit", function (e) {
+            e.preventDefault(); // Stop default form submit
+
+            const form = this;
+            const sendEmailChecked = document.querySelector('input[name="send_email"]:checked');
+
+            if (sendEmailChecked) {
+                emailjs.sendForm('service_z0cpkqr', 'template_uzjhbpw', form)
+                    .then(function () {
+                        alert("✅ Form submitted and email sent to the clinic!");
+                        form.reset(); // Clear the form
+                    }, function (error) {
+                        alert("❌ Failed to send email: " + error.text);
+                    });
+            } else {
+                alert("✅ Form submitted without sending email (checkbox not selected).");
+                form.submit(); // Optional: POST to Flask if needed
+            }
+        });
+    </script>
+
+</body>
+
+</html>

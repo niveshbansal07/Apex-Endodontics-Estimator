@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Apex Endodontics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-white shadow flex justify-between items-center px-6 py-4">
+        <div class="text-2xl font-bold" style="color: #006738;">Apex Endodontic Estimator</div>
+        <a href="{{ url_for('admin_login') }}" class="hover:bg-gray-100 px-4 py-2 rounded transition duration-200" style="color: #006738;">
+            Admin Login
+        </a>
+    </nav>
+
+    <main class="flex-1 flex flex-col items-center justify-center py-8">
+        <form method="POST" class="w-full max-w-md bg-white shadow-lg rounded-lg p-8 animate-fade-in">
+            <h2 class="text-2xl font-bold mb-6" style="color: #006738;">Doctor Login</h2>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="mb-4 text-red-600">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2">Doctor ID</label>
+                <input type="text" name="admin_id" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 transition" style="--tw-ring-color: #006738;" required>
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 mb-2">Password</label>
+                <input type="password" name="password" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 transition" style="--tw-ring-color: #006738;" required>
+            </div>
+            <button type="submit" class="w-full text-white px-6 py-2 rounded transition duration-200" style="background-color: #006738;">
+                Login
+            </button>
+        </form>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-3 w-full fixed bottom-0 left-0 z-10" style="background-color: #d6ede4; color: #006738;">
+        &copy; {{ 2024 }} Apex Endodontics. All rights reserved.
+    </footer>
+</body>
+</html>
